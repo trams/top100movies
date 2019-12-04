@@ -1,0 +1,4 @@
+venv/
+venv_wsl/
+.idea/
+__pycache__/
