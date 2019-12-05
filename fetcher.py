@@ -1,3 +1,5 @@
+import os
+
 import requests
 from bs4 import BeautifulSoup
 
@@ -37,7 +39,7 @@ def fetch_all_movie_pages(limit=100, output_folder="data"):
                 raise Exception("Failed to fetch full credits for {}. Error: {}".format(movie.link, response.text))
 
             movie_uid = get_movie_uid(movie)
-            with open(output_folder + "/" + movie_uid, "w") as f:
+            with open(os.path.join(output_folder, movie_uid), "w") as f:
                 f.write(fullcredits.text)
 
 
