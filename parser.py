@@ -1,3 +1,7 @@
+import os
+
+from bs4 import BeautifulSoup
+
 from model import *
 
 
@@ -47,3 +51,14 @@ def get_others(parsed_html):
         result.append(Person(link, name))
 
     return result
+
+
+def load_all_data(folder):
+    for file in os.listdir(folder):
+        path = os.path.join(folder, file)
+        if os.path.isfile(path):
+            with open(path) as f:
+                parsed = BeautifulSoup(f, "html.parser")
+                movie = get_movie(parsed)
+                people = get_cast_list(parsed) + get_others(parsed)
+                yield movie, people

@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup
 
 
 html_doc = None
-with open("test_data/tt0054215_full_credits") as f:
+with open("test_data/movies/tt0054215_full_credits") as f:
     html_doc = f.read()
 
 
@@ -42,3 +42,19 @@ def test_get_others():
     assert len(others) == 80
     assert others[0].name == "Alfred Hitchcock"
     assert others[-1].name == "Dolores Stockton"
+
+
+def test_load_all_data():
+    by_family_name = dict()
+    db = dict()
+    for movie, people in parser.load_all_data("test_data/movies"):
+        db[movie.name] = people
+        for person in people:
+            family_name = person.name.split(" ")[-1]
+            by_family_name.setdefault(family_name, set()).add(movie.name)
+
+    assert len(db) == 2
+    people = db["Psycho"]
+    assert len(people) == 116
+    assert by_family_name["Hitchcock"] == set(["Psycho"])
+    assert by_family_name["Garcia"] == set(["City Lights"])
