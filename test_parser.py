@@ -7,7 +7,21 @@ html_doc = None
 with open("test_data/tt0054215_full_credits") as f:
     html_doc = f.read()
 
-parsed_html = BeautifulSoup(html_doc, 'html.parser')
+
+movie_list_html = None
+with open("test_data/movie_list") as f:
+    movie_list_html = f.read()
+
+parsed_html = BeautifulSoup(html_doc, "html.parser")
+parsed_movie_list = BeautifulSoup(movie_list_html, "html.parser")
+
+
+def test_get_movies():
+    movies = parser.get_movies(parsed_movie_list)
+    assert len(movies) == 50
+    psycho_movie = movies[1]
+    assert psycho_movie.name == "Psycho"
+    assert psycho_movie.link == "/title/tt0054215/"
 
 
 def test_get_movie():
