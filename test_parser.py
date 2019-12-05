@@ -21,3 +21,10 @@ def test_get_cast_list():
     assert len(cast_list) == 36
     assert cast_list[0].link == "/name/nm0000578/"
     assert cast_list[0].name == "Anthony Perkins"
+
+
+def test_get_others():
+    others = parser.get_others(parsed_html)
+    assert len(others) == 80
+    assert others[0].name == "Alfred Hitchcock"
+    assert others[-1].name == "Dolores Stockton"

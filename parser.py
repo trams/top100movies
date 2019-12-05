@@ -18,9 +18,20 @@ def get_movie(parsed_html):
 
 def get_cast_list(parsed_html):
     result = []
-    for tag in parsed_html.select("table.cast_list tr td:nth-of-type(2)"):
-        link = tag.a['href']
-        name = tag.a.text.strip()
+    for tag in parsed_html.select("table.cast_list tr td:nth-of-type(2) a"):
+        link = tag['href']
+        name = tag.text.strip()
+        result.append(Person(link, name))
+
+    return result
+
+
+def get_others(parsed_html):
+    result = []
+    selector = "div[id=fullcredits_content] table td.name a"
+    for tag in parsed_html.select(selector):
+        link = tag['href']
+        name = tag.text.strip()
         result.append(Person(link, name))
 
     return result
