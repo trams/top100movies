@@ -3,3 +3,4 @@ venv_wsl/
 .idea/
 __pycache__/
 data/
+.history
