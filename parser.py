@@ -1,4 +1,5 @@
 import os
+import json
 
 from bs4 import BeautifulSoup
 
@@ -62,3 +63,35 @@ def load_all_data(folder):
                 movie = get_movie(parsed)
                 people = get_cast_list(parsed) + get_others(parsed)
                 yield movie, people
+
+
+def db_to_json(db, fp):
+    json.dump(db, fp)
+
+
+def json_to_db(fp):
+    result = dict()
+    obj = json.load(fp)
+    if type(obj) is not dict:
+        raise Exception("Json object is expected but this found: " + str(type(obj)))
+    for key, value in obj.items():
+        parsed_value = [Person(item[0], item[1]) for item in value]
+        result[key] = parsed_value
+    return result
+
+
+if __name__ == "__main__":
+    import sys
+    try:
+        from tqdm import tqdm
+    except ImportError:
+        def tqdm(iterator):
+            return iterator
+
+    data_folder, output_path = sys.argv[1:]
+    db = dict()
+    for movie, people in tqdm(load_all_data(data_folder)):
+        db[movie.name] = people
+
+    with open(output_path, "w") as f:
+        db_to_json(db, f)

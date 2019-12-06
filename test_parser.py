@@ -1,5 +1,7 @@
 import parser
 
+import io
+
 from bs4 import BeautifulSoup
 
 
@@ -58,3 +60,16 @@ def test_load_all_data():
     assert len(people) == 116
     assert by_family_name["Hitchcock"] == set(["Psycho"])
     assert by_family_name["Garcia"] == set(["City Lights"])
+
+
+def test_ser_deser():
+    db = dict()
+    for movie, people in parser.load_all_data("test_data/movies"):
+        db[movie.name] = people
+
+    stream = io.StringIO()
+    parser.db_to_json(db, stream)
+    stream.seek(0)
+    newdb = parser.json_to_db(stream)
+
+    assert newdb == db
