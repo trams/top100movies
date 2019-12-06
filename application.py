@@ -30,7 +30,7 @@ class State:
             if result is None:
                 result = word_result
             else:
-                result.intersection_update(word_result)
+                result = result.intersection(word_result)
 
         return list(result)
 
