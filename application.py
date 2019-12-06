@@ -7,13 +7,34 @@ except ImportError:
 
 
 class State:
-    def __init__(self, folder):
-        self.db = dict()
-        for movie, people in parser.load_all_data(folder):
-            print("Loaded {}".format(movie))
-            self.db[movie] = [person.name.lower() for person in people]
+    def __init__(self, path):
+        with open(path) as f:
+            self.db = parser.json_to_db(f)
+
+        self.index = dict()
+
+        for movie, people in self.db.items():
+            for person in people:
+                for word in person.name.lower().split():
+                    if word != "":
+                        self.index.setdefault(word, set()).add(movie)
 
     def get(self, raw_query):
+        query = [item for item in raw_query.split(" ") if item != ""]
+        if len(query) == 0:
+            return []
+        result = None
+
+        for word in query:
+            word_result = self.index.get(word, set())
+            if result is None:
+                result = word_result
+            else:
+                result.intersection_update(word_result)
+
+        return list(result)
+
+    def naive_get(self, raw_query):
         query = [item for item in raw_query.split(" ") if item != ""]
         if len(query) == 0:
             return []
@@ -23,7 +44,7 @@ class State:
             for query_part in query:
                 match = False
                 for person in people:
-                    if person.find(query_part) != -1:
+                    if person.name.lower().find(query_part) != -1:
                         match = True
                         break
 
@@ -31,7 +52,7 @@ class State:
                     full_query_match = False
                     break
             if full_query_match:
-                result.append(movie.name)
+                result.append(movie)
 
         return result
 
