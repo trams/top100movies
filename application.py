@@ -2,8 +2,9 @@ import parser
 
 try:
     import readline
+    no_readline = False
 except ImportError:
-    pass
+    no_readline = True
 
 
 class State:
@@ -73,6 +74,23 @@ class Application:
 
 
 if __name__ == "__main__":
+    if not no_readline:
+        readline.parse_and_bind("tab: complete")
+        histfile = ".history"
+        if hasattr(readline, "read_history_file"):
+            try:
+                readline.read_history_file(histfile)
+            except FileNotFoundError:
+                pass
+
+            def save_history(histfile_path):
+                readline.set_history_length(1000)
+                readline.write_history_file(histfile_path)
+
+            import atexit
+
+            atexit.register(save_history, histfile)
+
     import sys
     path = sys.argv[1]
     app = Application(path)
