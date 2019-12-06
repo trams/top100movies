@@ -1,0 +1,18 @@
+This is a toy project to brush up my python 3 skills
+
+The goal is to provide a simple search engine for IMDB Top 1000 movies
+This projects provides:
+1. a fetcher. A script to fetch full credits for topN movies
+
+use `python ./fetcher.py FOLDER_TO_STORE_DOWNLOADED 100` where 100 signifies that we need to download top 100
+
+2. a parser. It parses downloaded full credits to extracts the list of all people worked on the project
+
+`python ./parser.py FOLDER_TO_STORE_DOWNLOADED PATH_TO_OUTPUTED_DB.json``
+
+3. an application. A simple REPL to do lookups.
+
+You can launch it using
+`python ./application.py PATH_TO_OUTPUTED_DB.json`
+
+Type `quit` to quit.
