@@ -74,6 +74,6 @@ class Application:
 
 if __name__ == "__main__":
     import sys
-    data_folder = sys.argv[1]
-    app = Application(data_folder)
+    path = sys.argv[1]
+    app = Application(path)
     app.run()
