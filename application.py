@@ -20,7 +20,7 @@ class State:
                         self.index.setdefault(word, set()).add(movie)
 
     def get(self, raw_query):
-        query = [item for item in raw_query.split(" ") if item != ""]
+        query = [item.lower() for item in raw_query.split(" ") if item != ""]
         if len(query) == 0:
             return []
         result = None
